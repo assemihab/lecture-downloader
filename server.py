@@ -1,23 +1,49 @@
-from flask import Flask
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import downloadingUtils
 
-app=Flask(__name__)
+# import pdb
 
-@app.route('/messagesrepo,methods=['POST'])
-def takeInputDate():
+app = Flask(__name__)
+
+
+CORS(app) 
+
+
+def autoRunFunction():
+    num=downloadingUtils.getTodaysDate()
+    print(num)
+    # pdb.set_trace()
+
+
+@app.route('/yourEndpoint', methods=['POST'])
+def handlePostRequest():
+    if request.is_json:
+        data = request.get_json()
+        key = data.get('key')
+        anotherKey = data.get('anotherKey')
+        
+        responseData = {
+            'message': 'Received POST data',
+            'key': key,
+            'anotherKey': anotherKey
+        }
+        return jsonify(responseData), 200
+    else:
+        return 'Invalid JSON data', 400
+
+if __name__ == '__main__':
+    autoRunFunction()
+    app.run(debug=True)
     
-    return 'Hello,World'
-
-if __name__=='__main__':
-    app.run()
-    
 
 
-
+"""
 // Create a new XMLHttpRequest object
 var xhr = new XMLHttpRequest();
 
 // Specify the HTTP method, URL, and whether the request should be asynchronous
-xhr.open("POST", "http://127.0.0.1:5000/your_endpoint", true);
+xhr.open("POST", "http://127.0.0.1:5000/yourEndpoint", true);
 
 // Set the request headers (if needed)
 xhr.setRequestHeader("Content-Type", "application/json"); // Adjust as needed
@@ -42,3 +68,4 @@ var jsonData = JSON.stringify(data);
 
 // Send the POST request with the data
 xhr.send(jsonData);
+"""
