@@ -1,20 +1,22 @@
+# from flask import Flask, request, jsonify
+# from flask_cors import CORS
+import utilToUse
 from flask import Flask, request, jsonify
 from flask_cors import CORS
-import downloadingUtils
 
 # import pdb
 
-app = Flask(__name__)
 
-
-CORS(app) 
 
 
 def autoRunFunction():
-    num=downloadingUtils.getTodaysDate()
+    num=utilToUse.getTodaysDate()
     print(num)
     # pdb.set_trace()
 
+
+app = Flask(__name__)
+CORS(app)
 
 @app.route('/yourEndpoint', methods=['POST'])
 def handlePostRequest():
@@ -24,9 +26,7 @@ def handlePostRequest():
         anotherKey = data.get('anotherKey')
         
         responseData = {
-            'message': 'Received POST data',
-            'key': key,
-            'anotherKey': anotherKey
+            'message': 'Received POST data'
         }
         return jsonify(responseData), 200
     else:
@@ -36,6 +36,10 @@ if __name__ == '__main__':
     autoRunFunction()
     app.run(debug=True)
     
+
+
+
+
 
 
 """
