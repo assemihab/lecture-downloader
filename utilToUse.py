@@ -199,7 +199,54 @@ def moveToDirectory(destinationPathh) ->None:
         except Exception as e:
             print(f"An error occurred: {e}")
 
+def wrtieTheLatestDate(jsInput):
+    daysDict = {
+        'SUNDAY': 1,
+        'MONDAY': 2,
+        'TUESDAY': 3,
+        'WEDNESDAY': 4,
+        'THURSDAY': 5,
+        'FRIDAY': 6,
+        'SATURDAY': 7
+    }
+    # jsInput='09/05/2023'
+    newjsInput=jsInput.replace("/",'-')
+
+    if(jsInput=='TODAY'):
+        return getTodaysDate()
+    elif(jsInput=='YESTERDAY'):
+        today=getTodaysDate()
+        # print(today)
+        today=datetime.datetime.strptime(today,"%d-%m-%Y")
+        # print(today)
+        oneDay=datetime.timedelta(days=1)
+        yesterDay=(today-oneDay)
+        yesterDay.strftime("%d-%m-%Y")
+        yesterDay=str(yesterDay)
+        yesterDay=yesterDay[:10]
+        return yesterDay
+    elif jsInput == 'SUNDAY' or jsInput == 'MONDAY' or jsInput == 'TUESDAY' or jsInput == 'WEDNESDAY' or jsInput == 'THURSDAY' or jsInput == 'FRIDAY' or jsInput == 'SATURDAY':
+        today=getTodaysDate()
+        today=datetime.datetime.strptime(today,"%d-%m-%Y")
+        todayStr=today.strftime('%A')
+        todaynum=daysDict[str(todayStr).upper()]
+        covetedDayNum=daysDict[jsInput]
+        daysdiff=(todaynum-covetedDayNum+7)%7
+        daysdiff=datetime.timedelta(days=daysdiff)
+        wantedDate=today-daysdiff
+        wantedDate=wantedDate.strftime("%d-%m-%Y")
+        return wantedDate
+    else:
+        newjsInput=jsInput.replace("/",'-')
+        return newjsInput
 # %%
+def getFormattedDate(file_path):
+    latestdate=readLatestDate(file_path)
+    todaysDate=getTodaysDate()
+    difference=dateDifference(latestdate,todaysDate)
+    formattedDDate=formattedLastDay(difference,file_path)
+    return formattedDDate
+
 if __name__=="__main__":
     file_path = 'E:\projects\lectures downloader\lastDate.txt'  
     destPath="E:\\FCSE\\testScript"

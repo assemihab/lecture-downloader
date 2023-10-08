@@ -3,17 +3,22 @@
 import utilToUse
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+import threading
 
 # import pdb
 
+file_path = 'E:\projects\lectures downloader\lastDate.txt'
+groupID='LWLZdL20Z11B0zI5SPUndn'
 
-
-
-def autoRunFunction():
-    num=utilToUse.getTodaysDate()
-    print(num)
+def autoRunFunction(file_path,groupID):
+    utilToUse.openGroup(groupID)
+    utilToUse.openTheConsole()
+    utilToUse.getFormattedDate(file_path)
+    
     # pdb.set_trace()
-
+def writeCommand():
+    # utilToUse.writeCommand()
+    # pdb.set_tra
 
 app = Flask(__name__)
 CORS(app)
@@ -22,8 +27,11 @@ CORS(app)
 def handlePostRequest():
     if request.is_json:
         data = request.get_json()
-        key = data.get('key')
-        anotherKey = data.get('anotherKey')
+        
+        date = data.get('key')
+        formattedDate=utilToUse.wrtieTheLatestDate(date)
+        with open(file_path, 'w') as f:
+            f.write(formattedDate)
         
         responseData = {
             'message': 'Received POST data'
@@ -33,8 +41,18 @@ def handlePostRequest():
         return 'Invalid JSON data', 400
 
 if __name__ == '__main__':
-    autoRunFunction()
-    app.run(debug=True)
+    # autoRunFunction(file_path,groupID)
+    writeCommandThread=threading.Thread(target=writeCommand)
+    serverThread=threading.Thread(target=app.run(debug=False))
+    # serverThread.daemon=True
+    writeCommandThread.start()
+    serverThread.start()
+    # import time
+    # time.sleep(5)
+
+    # app.run(debug=True)
+    #I want to run the server in the backGround and open new thread for write commands function
+    # writeCommand()
     
 
 
