@@ -17,10 +17,11 @@ def autoRunFunction(file_path,groupID):
     
     # pdb.set_trace()
 def writeCommand():
+    pass
     # utilToUse.writeCommand()
     # pdb.set_tra
+app= Flask(__name__)
 
-app = Flask(__name__)
 CORS(app)
 
 @app.route('/yourEndpoint', methods=['POST'])
